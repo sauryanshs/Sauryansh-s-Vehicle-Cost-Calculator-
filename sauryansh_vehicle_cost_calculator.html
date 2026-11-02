@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10251f">
+<title>Sauryansh's Vehicle Cost Calculator</title>
+<style>
+:root{--bg:#f4f7f5;--card:#fff;--ink:#17231e;--muted:#63736b;--line:#dce6df;--green:#176b4b;--soft:#e9f4ee}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:#10251f;color:white;padding:28px 18px 24px}header .wrap,main{max-width:980px;margin:auto}
+.kicker{font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:#a8c8b7;font-weight:700}
+h1{font-size:clamp(25px,5vw,38px);line-height:1.1;margin:8px 0}header p{margin:8px 0 0;color:#d1e2d8}
+main{padding:20px 14px 48px}.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:17px;margin:0 0 15px;box-shadow:0 4px 18px #163c2510}
+h2{font-size:19px;margin:0 0 12px}.hint{color:var(--muted);font-size:13px;margin:-5px 0 14px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media(min-width:700px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.vehicle-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+label{display:block;color:var(--muted);font-size:12px;font-weight:650;margin-bottom:5px}
+input{width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;font:inherit;color:var(--ink);background:white}
+.vehicle{border:1px solid var(--line);border-radius:13px;padding:14px;margin:12px 0}.vehicle h3{margin:0 0 12px;font-size:17px}.vehicle.ev{border-top:4px solid #21865b}.vehicle.pet{border-top:4px solid #c18a18}.vehicle.dsl{border-top:4px solid #3979b9}.vehicle.cng{border-top:4px solid #d66b2c}
+.results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.result{background:#f8fbf9;border:1px solid var(--line);border-radius:12px;padding:12px}.result .name{font-weight:750}.result strong{display:block;font-size:21px;margin:5px 0}.small{font-size:12px;color:var(--muted)}
+.winner{background:var(--soft);border:1px solid #b9d9c7;border-radius:13px;padding:15px;margin-top:12px}.winner strong{font-size:25px;color:var(--green)}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:580px}th,td{text-align:right;padding:10px 8px;border-bottom:1px solid var(--line)}th:first-child,td:first-child{text-align:left}th{color:var(--muted)}
+.table-wrap{overflow-x:auto}button{border:0;border-radius:10px;background:var(--green);color:white;padding:11px 15px;font:inherit;font-weight:700;cursor:pointer}button.secondary{background:#e9efeb;color:var(--ink)}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:10px}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="kicker">Personal vehicle ownership planner</div><h1>Sauryansh's Vehicle Cost Calculator</h1><p>Compare EV, petrol, diesel and CNG on total cost of ownership—not just fuel bills.</p></div></header>
+<main>
+<section class="panel"><h2>1. Driving pattern</h2><div class="grid">
+<div><label for="km">Monthly running (km)</label><input id="km" type="number" min="0" value="2500"></div>
+<div><label for="years">Ownership period (years)</label><input id="years" type="number" min="1" value="5"></div>
+</div></section>
+<section class="panel"><h2>2. Vehicle assumptions</h2><p class="hint">Enter on-road purchase price. Annual cost combines maintenance and insurance renewals.</p>
+<div class="vehicle-grid">
+<div class="vehicle ev"><h3>⚡ Electric vehicle</h3><div class="grid">
+<div><label>On-road price (₹)</label><input id="evP" type="number" value="1300000"></div>
+<div><label>Consumption (kWh/100 km)</label><input id="evE" type="number" value="20" step=".1"></div>
+<div><label>Electricity (₹/unit)</label><input id="evR" type="number" value="7.5" step=".1"></div>
+<div><label>Annual maintenance + insurance (₹)</label><input id="evM" type="number" value="18000"></div>
+<div><label>Resale (% of purchase price)</label><input id="evS" type="number" value="35"></div>
+</div></div>
+<div class="vehicle pet"><h3>⛽ Petrol vehicle</h3><div class="grid">
+<div><label>On-road price (₹)</label><input id="petP" type="number" value="900000"></div>
+<div><label>Real mileage (km/l)</label><input id="petE" type="number" value="15" step=".1"></div>
+<div><label>Petrol (₹/litre)</label><input id="petR" type="number" value="102" step=".1"></div>
+<div><label>Annual maintenance + insurance (₹)</label><input id="petM" type="number" value="25000"></div>
+<div><label>Resale (% of purchase price)</label><input id="petS" type="number" value="35"></div>
+</div></div>
+<div class="vehicle dsl"><h3>🛢️ Diesel vehicle</h3><div class="grid">
+<div><label>On-road price (₹)</label><input id="dslP" type="number" value="1000000"></div>
+<div><label>Real mileage (km/l)</label><input id="dslE" type="number" value="18" step=".1"></div>
+<div><label>Diesel (₹/litre)</label><input id="dslR" type="number" value="95" step=".1"></div>
+<div><label>Annual maintenance + insurance (₹)</label><input id="dslM" type="number" value="28000"></div>
+<div><label>Resale (% of purchase price)</label><input id="dslS" type="number" value="40"></div>
+</div></div>
+<div class="vehicle cng"><h3>🔥 CNG vehicle</h3><div class="grid">
+<div><label>On-road price (₹)</label><input id="cngP" type="number" value="900000"></div>
+<div><label>Real mileage (km/kg)</label><input id="cngE" type="number" value="27" step=".1"></div>
+<div><label>CNG (₹/kg)</label><input id="cngR" type="number" value="100" step=".1"></div>
+<div><label>Annual maintenance + insurance (₹)</label><input id="cngM" type="number" value="25000"></div>
+<div><label>Resale (% of purchase price)</label><input id="cngS" type="number" value="35"></div>
+</div></div></div>
+<div class="actions"><button id="reset" class="secondary" type="button">Reset sample values</button><button id="save" type="button">Save this comparison on this device</button></div><p id="saveMsg" class="small" aria-live="polite"></p>
+</section>
+<section class="panel"><h2>3. Results</h2><p class="hint" id="distance"></p><div class="results" id="results"></div><div class="winner" id="winner"></div></section>
+<section class="panel"><h2>4. Cost breakdown</h2><div class="table-wrap"><table><thead><tr><th>Cost head</th><th>EV</th><th>Petrol</th><th>Diesel</th><th>CNG</th></tr></thead><tbody id="breakdown"></tbody></table></div></section>
+<section class="panel"><h2>How this estimate works</h2><p class="hint">Total cost = purchase price + energy expense + annual maintenance/insurance − estimated resale value. EV consumption is entered per 100 km and should include charging losses.</p><p class="small">This version excludes loan interest/EMI, fuel-price inflation, charger installation, battery replacement, battery degradation and exceptional repairs. Add these separately when they are material. The saved comparison stays in this browser on this device; it is not cloud-synced.</p></section>
+<footer>Made for Sauryansh · Vehicle Cost Calculator</footer>
+</main>
+<script>
+const defaults={km:2500,years:5,evP:1300000,evE:20,evR:7.5,evM:18000,evS:35,petP:900000,petE:15,petR:102,petM:25000,petS:35,dslP:1000000,dslE:18,dslR:95,dslM:28000,dslS:40,cngP:900000,cngE:27,cngR:100,cngM:25000,cngS:35};
+const ids=Object.keys(defaults), names=[['EV','ev'],['Petrol','pet'],['Diesel','dsl'],['CNG','cng']];
+const el=id=>document.getElementById(id), val=id=>Math.max(0,Number(el(id).value)||0);
+const money=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+function calculate(){
+ const km=val('km'), years=val('years'), distance=km*12*years;
+ const data=names.map(([name,p])=>{
+  const price=val(p+'P'), efficiency=val(p+'E'), rate=val(p+'R'), annual=val(p+'M'), resale=price*val(p+'S')/100;
+  const energyPerKm=p==='ev'?efficiency/100*rate:(efficiency?rate/efficiency:0);
+  const energy=distance*energyPerKm, maintenance=annual*years, total=price+energy+maintenance-resale;
+  return {name,p,price,energy,maintenance,resale,total,perKm:distance?total/distance:0,monthly:energy/(years*12||1)};
+ });
+ el('distance').textContent=`${distance.toLocaleString('en-IN')} total kilometres over ${years} years. Energy cost is based on current rates held constant.`;
+ el('results').innerHTML=data.map(d=>`<div class="result"><div class="name">${d.name}</div><strong>${money(d.total)}</strong><div class="small">${money(d.perKm)} per km · ${money(d.monthly)} energy/month</div></div>`).join('');
+ const best=[...data].sort((a,b)=>a.total-b.total)[0], worst=[...data].sort((a,b)=>b.total-a.total)[0];
+ el('winner').innerHTML=`<div class="small">LOWEST ESTIMATED OWNERSHIP COST</div><strong>${best.name}</strong><div>${money(best.total)} total · ${money(best.perKm)} per km</div><div class="small">Estimated advantage over the highest-cost option: ${money(worst.total-best.total)}.</div>`;
+ const rows=[['Purchase price',d=>d.price],['Energy over ownership',d=>d.energy],['Maintenance + insurance',d=>d.maintenance],['Resale deduction',d=>-d.resale],['Total ownership cost',d=>d.total]];
+ el('breakdown').innerHTML=rows.map(([label,fn])=>`<tr><td>${label}</td>${data.map(d=>`<td>${money(fn(d))}</td>`).join('')}</tr>`).join('');
+}
+ids.forEach(id=>el(id).addEventListener('input',calculate));
+el('reset').addEventListener('click',()=>{ids.forEach(id=>el(id).value=defaults[id]);calculate();el('saveMsg').textContent='Sample values restored.'});
+el('save').addEventListener('click',()=>{const state={};ids.forEach(id=>state[id]=el(id).value);try{localStorage.setItem('sauryanshVehicleCalc',JSON.stringify(state));el('saveMsg').textContent='Comparison saved in this browser on this device.'}catch(e){el('saveMsg').textContent='Could not save in this browser.'}});
+try{const saved=JSON.parse(localStorage.getItem('sauryanshVehicleCalc')||'null');if(saved)ids.forEach(id=>{if(saved[id]!==undefined)el(id).value=saved[id]})}catch(e){}
+calculate();
+</script>
+</body></html>
